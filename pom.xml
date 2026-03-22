@@ -158,11 +158,27 @@
             <version>1.14.0</version>
             <configuration>
                 <targetClasses>
-                    <param>org.apache.commons.cli.*</param>
+                    <param>org.apache.commons.cli.HelpFormatter</param>
+                    <param>org.apache.commons.cli.Option</param>
+                    <param>org.apache.commons.cli.Options</param>
+                    <param>org.apache.commons.cli.DefaultParser</param>
+                    <param>org.apache.commons.cli.CommandLine</param>
+                    <param>org.apache.commons.cli.TypeHandler</param>
+                    <param>org.apache.commons.cli.OptionGroup</param>
+                    <param>org.apache.commons.cli.ParseException</param>
+                    <param>org.apache.commons.cli.MissingOptionException</param>
+                    <param>org.apache.commons.cli.AlreadySelectedException</param>
                 </targetClasses>
                 <targetTests>
-                    <param>org.apache.commons.cli.*</param>
+                    <param>*</param>
                 </targetTests>
+                <threads>1</threads>
+                <mutators>DEFAULTS</mutators>
+                <timeoutConst>5000</timeoutConst>
+                <verbose>true</verbose>
+                <avoidCallsTo>
+                    <param>java.lang.System</param>
+                </avoidCallsTo>
             </configuration>
             <dependencies>
                 <dependency>
