@@ -205,8 +205,19 @@
         <artifactId>maven-checkstyle-plugin</artifactId>
       </plugin>
       <plugin>
-        <groupId>com.github.spotbugs</groupId>
-        <artifactId>spotbugs-maven-plugin</artifactId>
+          <groupId>com.github.spotbugs</groupId>
+          <artifactId>spotbugs-maven-plugin</artifactId>
+          <version>4.9.8.2</version>
+          <configuration>
+              <effort>Max</effort>
+              <threshold>Low</threshold>
+              <xmlOutput>true</xmlOutput>
+              <xmlOutputDirectory>${project.build.directory}</xmlOutputDirectory>
+              <outputDirectory>${project.build.directory}/spotbugs-html</outputDirectory>
+              <htmlOutput>true</htmlOutput>
+              <reportFormat>html</reportFormat>
+              <includeFilterFile>src/conf/spotbugs-include-filter.xml</includeFilterFile>
+          </configuration>
       </plugin>
       <plugin>
         <artifactId>maven-assembly-plugin</artifactId>
