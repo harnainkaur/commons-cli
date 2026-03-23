@@ -60,6 +60,26 @@
       <artifactId>junit-jupiter-params</artifactId>
       <scope>test</scope>
     </dependency>
+
+    <dependency>
+        <groupId>org.evosuite</groupId>
+        <artifactId>evosuite-standalone-runtime</artifactId>
+        <version>1.0.6</version>
+        <scope>test</scope>
+    </dependency>
+    <dependency>
+        <groupId>junit</groupId>
+        <artifactId>junit</artifactId>
+        <version>4.13.2</version>
+        <scope>test</scope>
+    </dependency>
+    <dependency>
+        <groupId>org.junit.vintage</groupId>
+        <artifactId>junit-vintage-engine</artifactId>
+        <version>5.10.0</version>
+        <scope>test</scope>
+    </dependency>
+
     <dependency>
       <groupId>org.junit-pioneer</groupId>
       <artifactId>junit-pioneer</artifactId>
@@ -87,8 +107,8 @@
   <properties>
     <!-- project.build.outputTimestamp is managed by Maven plugins, see https://maven.apache.org/guides/mini/guide-reproducible-builds.html -->
     <project.build.outputTimestamp>2025-11-12T21:37:53Z</project.build.outputTimestamp>
-    <maven.compiler.source>1.8</maven.compiler.source>
-    <maven.compiler.target>1.8</maven.compiler.target>
+    <maven.compiler.source>11</maven.compiler.source>
+    <maven.compiler.target>11</maven.compiler.target>
     <commons.componentid>cli</commons.componentid>
     <commons.module.name>org.apache.commons.cli</commons.module.name>
     <commons.release.version>1.11.1</commons.release.version>
@@ -125,7 +145,27 @@
             <enableRulesSummary>false</enableRulesSummary>
             <includeTestSourceDirectory>true</includeTestSourceDirectory>
           </configuration>
-        </plugin>      
+        </plugin> 
+        <plugin>
+    <groupId>org.apache.rat</groupId>
+          <artifactId>apache-rat-plugin</artifactId>
+          <version>0.17</version>
+          <configuration>
+              <excludes>
+                  <exclude>**/evosuite-tests/**</exclude>
+                  <exclude>**/evosuite-report/**</exclude>
+              </excludes>
+          </configuration>
+      </plugin> 
+      <plugin>
+          <artifactId>maven-compiler-plugin</artifactId>
+          <version>3.11.0</version>
+          <configuration>
+              <source>11</source>
+              <target>11</target>
+              <release>11</release> 
+          </configuration>
+      </plugin>
       <plugin>
         <groupId>com.github.spotbugs</groupId>
         <artifactId>spotbugs-maven-plugin</artifactId>
@@ -155,7 +195,7 @@
         <plugin>
             <groupId>org.pitest</groupId>
             <artifactId>pitest-maven</artifactId>
-            <version>1.14.0</version>
+            <version>1.17.0</version>
             <configuration>
                 <targetClasses>
                     <param>org.apache.commons.cli.HelpFormatter</param>
@@ -170,9 +210,14 @@
                     <param>org.apache.commons.cli.AlreadySelectedException</param>
                 </targetClasses>
                 <targetTests>
-                    <param>*</param>
+                    <param>org.apache.commons.cli.**</param> 
                 </targetTests>
-                <threads>1</threads>
+                <testSourceDirs>
+                    <param>src/test/java</param>
+                    <param>evosuite-tests</param>
+                </testSourceDirs>
+                <testPlugin>evosuite</testPlugin> 
+                <threads>2</threads>
                 <mutators>DEFAULTS</mutators>
                 <timeoutConst>5000</timeoutConst>
                 <verbose>true</verbose>
@@ -184,9 +229,28 @@
                 <dependency>
                     <groupId>org.pitest</groupId>
                     <artifactId>pitest-junit5-plugin</artifactId>
-                    <version>1.2.2</version>
+                    <version>1.2.1</version>
                 </dependency>
             </dependencies>
+        </plugin>
+        <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>build-helper-maven-plugin</artifactId>
+            <version>3.2.0</version>
+            <executions>
+                <execution>
+                    <id>add-test-source</id>
+                    <phase>generate-test-sources</phase>
+                    <goals>
+                        <goal>add-test-source</goal>
+                    </goals>
+                    <configuration>
+                        <sources>
+                            <source>evosuite-tests</source>
+                        </sources>
+                    </configuration>
+                </execution>
+            </executions>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
